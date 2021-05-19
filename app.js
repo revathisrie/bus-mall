@@ -1,116 +1,197 @@
-'use strict'
+'use strict';
+const resultsPannelUlElem = document.getElementById('itemClicks');
 
-const resultsPannelUlElem = document.getElementById('results');
-const allProductsSectionTag = document.getElementById('all_products');
-const firstImageTag = document.getElementById('first_img');
-const secondImageTag = document.getElementById('second_img');
-const thirdImageTag = document.getElementById('third_img');
-const firstImgH2Elem = document.getElementById('first_h2');
-const secondImgH2Elem = document.getElementById('second_h2');
-const thirdImgH2Elem = document.getElementById('third_h2');
+const firstImageTag = document.getElementById('img1');
+const secondImageTag = document.getElementById('img2');
+const rightImageTag = document.getElementById('img3');
+const firstPicName = document.getElementById('picNameOne');
+const secondPicName = document.getElementById('picNameTwo');
+const rightPicName = document.getElementById('picNameThree');
 
 let voteCounter = 0;
 
-let currentFirstImage = null;
-let currentSecondImage = null;
-let currentThirdImage = null;
 
-function Product(name, imgPath){
-   // this.name = name;
-    this.imgPath = imgPath;
-    this.votes = 0; //the other properties havent been seen. set them to 0
-    this.views = 0; //everytime you click on an object increase this value
+let firstPic = null;
+let centerPic = null;
+let rightPic = null;
 
-    Product.allProducts.push(this)//push this whenever the object is instantiated (into the allProducts arrary)
+
+function Product(name, imgPath) {
+  this.name = name;
+  this.imgPath = imgPath;
+  this.votes = 0;
+  this.timesShown = 0;
+
+  Product.allProducts.push(this)
 }
+
 
 Product.allProducts = [];
 
-Product.prototype.renderProduct = function(h2,imageTag){
-    imageTag.src = this.imgPath;
-    h2.textContent = this.name;
+Product.prototype.renderItem = function(name, imageTag) {
+  imageTag.src = this.imgPath;
+  name.textContent = this.name;
 }
 
-function renderThreeProducts(firstImage, secondImage, thirdImage){
-    firstImage.renderProduct(firstImgH2Elem , firstImageTag);
-    secondImage.renderProduct(secondImgH2Elem, secondImageTag);
-    thirdImage.renderProduct(thirdImgH2Elem, thirdImageTag);
+function renderThreeProducts(firstImage, secondImage,rightImage) {
+  firstImage.renderItem(firstPicName,firstImageTag );
+  secondImage.renderItem(secondPicName,secondImageTag);
+  rightImage.renderItem(rightPicName,rightImageTag );
+
 }
 
-function randomImage(){
-    const firstRandom = Math.floor(Math.random() * allProducts.length);
-    const secondRandom = Math.floor(Math.random() * allProducts.length);
-  const thirdRandom = Math.floor(Math.random() * allProducts.length);
 
-  while (firstRandom === secondRandom || firstRandom === thirdRandom || secondRandom === thirdRandom) {
-    firstRandom = Math.floor(Math.random() * allProducts.length);
-    secondRandom = Math.floor(Math.random() * allProducts.length);
-    thirdRandom = Math.floor(Math.random() * allProducts.length);
-}
- currentFirstImage = Product.allProducts[firstRandom];
- currentSecondImage = Product.allProducts[secondRandom];
- currentThirdImage = Product.allProducts[thirdRandom];
+function pickProducts() {
+  const firstImgIndex = Math.floor(Math.random() * Product.allProducts.length);
+
+  let secondImgIndex;
+  let rightImgIndex;
+  
+  while (secondImgIndex === undefined || secondImgIndex === firstImgIndex) {
+    secondImgIndex = Math.floor(Math.random() * Product.allProducts.length);
+  }
+  
+  while (rightImgIndex === undefined || rightImgIndex === firstImgIndex || rightImgIndex === secondImgIndex) {
+    rightImgIndex = Math.floor(Math.random() * Product.allProducts.length);
+  }
+  firstPic = Product.allProducts[firstImgIndex];
+  centerPic = Product.allProducts[secondImgIndex];
+  rightPic = Product.allProducts[rightImgIndex];
 }
 
-function renderResults(){
-    resultsPannelUlElem.innerHTML = '';
-    const h2Elem = document.createElement('h2');
-  h2Elem.textContent = 'Results';
+function renderResults() {
+  resultsPannelUlElem.innerHTML = '';
+  const h2Elem = document.createElement('h2');
+  h2Elem.textContent = 'Products Picked';
   resultsPannelUlElem.appendChild(h2Elem);
-  for(let i=0; i<Product.allProducts.length;i++){
-    const liElem = document.createElement('li');
-       liElem.textContent = `${allProducts.name} : ${allProducts.votes}`;
-      resultsPannelUlElem.appendChild(liElem);
+
+  for (let item of Product.allProducts) {
+    const liElm = document.createElement('li');
+    liElm.textContent = `${item.name} : ${item.votes}`;
+    resultsPannelUlElem.appendChild(liElm);
+  }
+}
+
+function handleClick(e) {
+  console.log('Hello, I am Listening');
+  let thingTheyClickedOn = e.target;
+  console.log(thingTheyClickedOn, firstImageTag.children);
+
+  if (voteCounter < 25) {
+    if (thingTheyClickedOn === firstImageTag || thingTheyClickedOn === secondImageTag || thingTheyClickedOn === rightImageTag) {
+      voteCounter++;
+      console.log("we made it")
+     
+      if (thingTheyClickedOn === firstImageTag) {
+        firstPic.votes++;
+      
+      } else if (thingTheyClickedOn === secondImageTag) {
+        centerPic.votes++;
+     
+      } else if (thingTheyClickedOn === rightImageTag) {
+        rightPic.votes++;
+      }
+
+      pickProducts();
+      console.log(firstPic,centerPic,rightPic);
+      renderThreeProducts(firstPic, centerPic, rightPic);
+
+    }  
+
+  } else {
+    firstImageTag.removeEventListener('click', handleClick);
+    secondImageTag.removeEventListener('click', handleClick);
+    rightImageTag.removeEventListener('click', handleClick);
+    renderResults();
+    callChart();
   }
 
 }
 
-function handleImageClick(event){
-    let userClick = e.target;
+// Event Listener
+firstImageTag.addEventListener('click', handleClick);
+secondImageTag.addEventListener('click', handleClick);
+rightImageTag.addEventListener('click', handleClick);
 
-  if (voteCounter < 7){
-    if ((userClick === firstImageTag || userClick === secondImageTag) || userClick === thirdImageTag) {
-        voteCounter++;
-        if (userClick === firstImageTag){
-          currentFirstImage.votes++;
-        } else if (userClick === secondImageTag) {
-          currentSecondImage.votes++;
-        } else {
-          currentThirdImage.votes++
-        }
-        randomImage();
-        renderThreeProducts(currentFirstImage, currentSecondImage, currentThirdImage);
-      } else {
-      alert(`Choose a desired product by clicking its image`);
-      }
-    } else {
-        allProductsSectionTag.removeEventListener('click', clickListen);
-       renderResults();
+// Calling the Products
+new Product('Bag', '../img/bag.jpg');
+new Product('Banana', '../img/banana.jpg');
+new Product('Bathroom','../img/bathroom.jpg');
+new Product('Boots','../img/boots.jpg');
+new Product('Breakfast', '../img/breakfast.jpg');
+new Product('Bubble Gum', '../img/bubblegum.jpg');
+new Product('Chair', '../img/chair.jpg');
+new Product('Cthulhu', '../img/cthulhu.jpg');
+new Product('Dog-Duck', '../img/dog-duck.jpg');
+new Product('Dragon', '../img/dragon.jpg');
+new Product('Pen', '../img/pen.jpg');
+new Product('Pet-Sweep', '../img/pet-sweep.jpg');
+new Product('Scissors', '../img/scissors.jpg');
+new Product('Shark', '../img/shark.jpg');
+new Product('Sweep', '../img/sweep.png');
+new Product('tauntaun', '../img/tauntaun.jpg');
+new Product('Unicorn', '../img/unicorn.jpg');
+new Product('Water Can', '../img/water-can.jpg');
+new Product('Wine Glass', '../img/wine-glass.jpg');
+
+
+// Calling the Functions
+pickProducts();
+console.log(firstPic);
+console.log(centerPic);
+console.log(rightPic);
+renderThreeProducts(firstPic, centerPic, rightPic);
+
+var ctx = document.getElementById('chart').getContext('2d');
+
+
+
+var nameArray = [];
+var voteArray = [];
+
+
+console.log(voteArray);
+function callChart(){
+  for (let item of Product.allProducts) {
+
+    nameArray.push(item.name);
+    voteArray.push(item.votes);
     
-    }
+    
   }
-  allProductsSectionTag.addEventListener('click', clickListen);
-
-new Product('bag', '../assets/bag.jpg');
-new Product('banana', '../assets/banana.jpg');
-new Product('bathroom', '../assets/bathroom.jpg');
-new Product('boots', '../assets/boots.jpg');
-new Product('breakfast', '../assets/breakfast.jpg');
-new Product('bubblegum', '../assets/bubblegum.jpg');
-new Product('chair', '../assets/chair.jpg');
-new Product('cthulhu', '../assets/cthulhu.jpg');
-new Product('dog-duck', '../assets/dog-duck.jpg');
-new Product('dragon', '../assets/dragon.jpg');
-new Product('pen', '../assets/pen.jpg');
-new Product('pet-sweep', '../assets/pet-sweep.jpg');
-new Product('scissors', '../assets/scissors.jpg');
-new Product('shark', '../assets/shark.jpg');
-new Product('sweep', '../assets/sweep.png');
-new Product('tauntaun', '../assets/tauntaun.jpg');
-new Product('unicorn', '../assets/unicorn.jpg');
-new Product('water-can', '../assets/water-can.jpg');
-new Product('wine-glass', '../assets/wine-glass.jpg');
-
-randomImage();
-renderThreeProducts(currentFirstImage, currentSecondImage, currentThirdImage);
-
+var myChart = new Chart(ctx, {
+  
+    type: 'bar',
+    data: {
+      labels: nameArray,
+        datasets: [{
+            label: '# of Votes',
+            data: voteArray,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+}
