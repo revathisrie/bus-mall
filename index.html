@@ -1,73 +1,59 @@
 <!DOCTYPE html>
-<html>
+  <html>
+    <head>
+      <title>BusMall</title>
+      <link rel="stylesheet" href="./css/reset.css">
+      <link rel="stylesheet" href="./css/style.css">
+    </head>
+    <body>
+      <header>
+        <section id = "welcome">
+        <h1>BusMall</h1>
+        </section>
+      </header>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Rubik:wght@900&display=swap"
-    rel="stylesheet">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Image Event Demo</title>
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body>
-  
-  <main>
-
-    <article id="Information">
-
-        <ul id="itemClicks">
-          <h2>Customer Votes</h2>
-          <li>Bag:  </li>
-          <li>Banana: </li>
-          <li>Bathroom: </li>
-          <li>Boots: </li>
-          <li>Breakfast: </li>
-          <li>Bubblegum: </li>
-          <li>Chair: </li>
-          <li>Cthulhu: </li>
-          <li>Dog-Duck: </li>
-          <li>Dragon: </li>
-          <li>Pen: </li>
-          <li>Pet-sweep: </li>
-          <li>Scissors: </li>
-          <li>Shark: </li>
-          <li>tauntaun: </li>
-          <li>Unicorn: </li>
-          <li>Water-Can: </li>
-          <li>Wine-Glass: </li>
+      <section id = "all_items">
+        <div id = "left_item">
+          <img id = "left_item_img" src = "images/bag.jpeg">
+          <h2 id = "left_item_h2">Left Item</h2>
+        </div>
+        <div id = "middle_item">
+          <img id = "middle_item_img" src = "images/banana.jpeg" >
+          <h2 id = "middle_item_h2">Middle Item</h2>
+        </div>
+        <div id = "right_item">
+          <img id = "right_item_img" src = "images/bathroom.jpeg">
+          <h2 id = "right_item_h2">Right Item</h2>
+        </div>
+        </section>
+        <section id = "counts">
+        <ul id = "results">
+          <h2>Results</h2>
+          <li>bag</li>
+          <li>banana</li>
+          <li>bathroom</li>
+          <li>boots</li>
+          <li>breakfast</li>
+          <li>bubblegum</li>
+          <li>chair</li>
+          <li>cthulhu</li>
+          <li>dog-duck</li>
+          <li>dragon</li>
+          <li>pen</li>
+          <li>pet</li>
+          <li>pet-sweep</li>
+          <li>scissors</li>
+          <li>shark</li>
+          <li>sweep</li>
+          <li>tauntaun</li>
         </ul>
-
-      </article>
-    <!-- <section id="all_items"> -->
-      <h1 id="A">Bus Mall</h1>
-
-      <div id="picNameOne">Pic1 name</div>
-      <div id="picNameTwo">Pic2 name</div>
-      <div id="picNameThree">Pic3 name</div>
-
-      <article id="pic1"> <img id="img1" src="../busMallAssets/bathroom.jpg" style="width:300px;height:300px;" alt="Item">
-      </article>
-      <article id="pic2"> <img id="img2" src="../busMallAssets/banana.jpg" style="width:300px;height:300px;" alt="Item"></article>
-      <article id="pic3"> <img id="img3" src="../busMallAssets/bag.jpg" style="width:300px;height:300px;" alt="Item"></article>
-
-
-  </main>
-
-  </main>
-  <footer>
-
-  </footer>
-  <canvas id="chart"></canvas>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
-    <script type="text/javascript" src="/app.js"></script>
-
-</body>
-
-</html>
+        <div id = "chart">
+          <canvas id = "itemChart" ></canvas>
+        </div>
+      </section>
+      <footer>
+      </footer>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+      <script src = "app.js"></script>
+    </body>
+  </html>
