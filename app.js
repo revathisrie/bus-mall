@@ -1,6 +1,5 @@
 'use strict'
 //-------------------------------------------------------------------
-//Global Variables
 const resultsPannelUlElem = document.getElementById('results');
 const itemImageSectionTag = document.getElementById('all_items');
 const leftItemImageTag = document.getElementById('left_item_img');
